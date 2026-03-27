@@ -5,6 +5,8 @@
 package com.mycompany.snake;
 
 import static com.mycompany.snake.Direction.DOWN;
+import static com.mycompany.snake.Direction.LEFT;
+import static com.mycompany.snake.Direction.RIGHT;
 import static com.mycompany.snake.Direction.UP;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -43,6 +45,12 @@ public class Snake {
             }
         }
     }
+    public void changeDirection(Direction direction){
+        this.direction = direction;
+    }
+    public Direction getDirection(){
+        return direction;
+    }
     public boolean canMove(){
         switch (direction){
             case UP:
@@ -56,12 +64,12 @@ public class Snake {
                 }
                 break;
             case RIGHT:
-                if(nodes.getFirst().getRow() + 1 >= Board.NUM_COLS){
+                if(nodes.getFirst().getCol() + 1 >= Board.NUM_COLS){
                     return false;
                 }
                 break;
             case LEFT:
-                if(nodes.getFirst().getRow() -1 < 0){
+                if(nodes.getFirst().getCol() -1 < 0){
                     return false;
                 }
                 break;
@@ -69,6 +77,27 @@ public class Snake {
         return true;
     }
     public void moveSnake(){
+        int row = nodes.getFirst().getRow();
+        int col = nodes.getFirst().getCol();
+        Node node = null;
         
+        switch (direction){
+            case UP:
+                node = new Node(row -1, col);
+                break;
+            case DOWN:
+                node = new Node(row +1, col);
+                break;
+            case RIGHT:
+                node = new Node(row, col + 1);
+                break;
+            case LEFT:
+                node = new Node(row, col - 1);
+                break;
+        } 
+        nodes.addFirst(node);
+        if (nodesToGrow == 0) {
+            nodes.removeLast();
+        }
     }
 }
