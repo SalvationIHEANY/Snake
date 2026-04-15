@@ -51,30 +51,39 @@ public class Snake {
     public Direction getDirection(){
         return direction;
     }
-    public boolean canMove(){
-        switch (direction){
+    public boolean canMove() {
+        int row = nodes.getFirst().getRow();
+        int col = nodes.getFirst().getCol();
+        Node node = null;
+        switch (direction) {
             case UP:
-                if(nodes.getFirst().getRow()- 1 < 0){
-                    return false;
-                }
+                node = new Node(row - 1, col);
                 break;
             case DOWN:
-                if(nodes.getFirst().getRow() + 1 >= Board.NUM_ROWS){
-                    return false;
-                }
-                break;
-            case RIGHT:
-                if(nodes.getFirst().getCol() + 1 >= Board.NUM_COLS){
-                    return false;
-                }
+                node = new Node(row + 1, col);
                 break;
             case LEFT:
-                if(nodes.getFirst().getCol() -1 < 0){
-                    return false;
-                }
+                node = new Node(row, col - 1);
                 break;
-        } 
+            case RIGHT:
+                node = new Node(row, col + 1);
+                break;
+        }
+        if (node.getRow() < 0 || node.getRow() >= Board.NUM_ROWS ||
+                node.getCol() < 0 || node.getCol() >= Board.NUM_COLS || colidesWithItself(node)) {
+            return false;
+        }
+                
         return true;
+    }
+    
+    public boolean colidesWithItself(Node nodeX) {
+        for (Node node: nodes) {
+            if (nodeX.getRow() == node.getRow() && nodeX.getCol() == node.getCol()) {
+                return true;
+            }
+        }
+        return false;
     }
     public void moveSnake(){
         int row = nodes.getFirst().getRow();
