@@ -4,6 +4,7 @@
  */
 package com.mycompany.snake;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -15,8 +16,9 @@ public class Food extends Node {
     
     private DrawSquareInterface drawSquareInterface;
     
-    public Food() {
+    public Food(DrawSquareInterface drawSquareInterface) {
         super(0,0);
+        this.drawSquareInterface = drawSquareInterface;
         int row = (int) (Math.random() * Board.NUM_ROWS);
         int col = (int) (Math.random() * Board.NUM_COLS);
 
@@ -25,7 +27,9 @@ public class Food extends Node {
     }
     
     public void paint(Graphics g){
-        drawSquareInterface.drawSquare(g, getRow(), getCol(), true);
+        Color color =  new Color(255, 255, 0);
+        g.setColor(color);
+        drawSquareInterface.drawSquare(g, getRow(), getCol(), false);
     }
     
 }

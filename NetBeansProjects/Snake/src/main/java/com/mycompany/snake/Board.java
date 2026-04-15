@@ -24,6 +24,8 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
     private static final int DELTA_TIME = 200;
 
     private Snake snake;
+    private Food food;
+    private SpecialFood specialFood;
     private Timer timer;
     private MyKeyAdapter keyAdapter;
     
@@ -65,6 +67,8 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
         keyAdapter = new MyKeyAdapter();
         addKeyListener(keyAdapter);
         setFocusable(true);
+        specialFood = new SpecialFood(this);
+        food = new Food(this);
         snake = new Snake(this);
         timer = new Timer(DELTA_TIME, new ActionListener(){
             @Override
@@ -91,7 +95,8 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintBorderBoard(g);
-        snake.paint(g);
+        if (snake != null){snake.paint(g);}
+        if (food != null) {food.paint(g);}
         Toolkit.getDefaultToolkit().sync();
 
     }
@@ -110,6 +115,7 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
     private int squareHeight() {
         return getHeight() / NUM_ROWS;
     }
+   
 
     public void drawSquare(Graphics g, int row, int col,
             boolean isHead) {
@@ -119,7 +125,7 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
         g.setColor(color);
         g.fillRect(x + 1, y + 1, squareWidth() - 2,
                 squareHeight() - 2);
-        g.setColor(color.brighter());
+        g.setColor(color.darker());
         g.drawLine(x, y + squareHeight() - 1, x, y);
         g.drawLine(x, y, x + squareWidth() - 1, y);
         g.setColor(color.darker());
