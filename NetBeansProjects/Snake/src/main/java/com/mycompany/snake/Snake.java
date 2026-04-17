@@ -4,6 +4,7 @@
  */
 package com.mycompany.snake;
 
+import com.mycompany.snake.interfaces.DrawSquareInterface;
 import static com.mycompany.snake.Direction.DOWN;
 import static com.mycompany.snake.Direction.LEFT;
 import static com.mycompany.snake.Direction.RIGHT;
@@ -34,8 +35,13 @@ public class Snake {
         for(int i = 0; i < 4 ; i++){
             Node node = new Node(initRow, initCol + i);
             nodes.add(node);
-        }    
+        }
+        nodesToGrow = 0;
     }
+    public void grow(int amount){
+        nodesToGrow += amount;
+    }
+    
     public void paint(Graphics g) {
         boolean first = true;
         for(Node node : nodes) {
@@ -85,6 +91,9 @@ public class Snake {
         }
         return false;
     }
+    public boolean isHead(Node nodeX){
+        return nodeX.getRow() == nodes.getFirst().getRow() && nodeX.getCol() == nodes.getFirst().getCol();
+    }
     public void moveSnake(){
         int row = nodes.getFirst().getRow();
         int col = nodes.getFirst().getCol();
@@ -107,6 +116,8 @@ public class Snake {
         nodes.addFirst(node);
         if (nodesToGrow == 0) {
             nodes.removeLast();
+        } else {
+            nodesToGrow--;
         }
     }
 }

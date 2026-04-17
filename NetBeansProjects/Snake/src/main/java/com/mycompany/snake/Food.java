@@ -4,6 +4,7 @@
  */
 package com.mycompany.snake;
 
+import com.mycompany.snake.interfaces.DrawSquareInterface;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;

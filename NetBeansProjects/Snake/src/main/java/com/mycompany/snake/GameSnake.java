@@ -17,6 +17,7 @@ public class GameSnake extends javax.swing.JFrame {
      */
     public GameSnake() {
         initComponents();
+        board1.setIncrementer(scoreBoard1);
     }
 
     /**
@@ -28,22 +29,24 @@ public class GameSnake extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        board2 = new com.mycompany.snake.Board();
+        scoreBoard1 = new com.mycompany.snake.ScoreBoard();
+        board1 = new com.mycompany.snake.Board();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().add(scoreBoard1, java.awt.BorderLayout.PAGE_END);
 
-        javax.swing.GroupLayout board2Layout = new javax.swing.GroupLayout(board2);
-        board2.setLayout(board2Layout);
-        board2Layout.setHorizontalGroup(
-            board2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout board1Layout = new javax.swing.GroupLayout(board1);
+        board1.setLayout(board1Layout);
+        board1Layout.setHorizontalGroup(
+            board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
         );
-        board2Layout.setVerticalGroup(
-            board2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        board1Layout.setVerticalGroup(
+            board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 272, Short.MAX_VALUE)
         );
 
-        getContentPane().add(board2, java.awt.BorderLayout.CENTER);
+        getContentPane().add(board1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -74,6 +77,7 @@ public class GameSnake extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.mycompany.snake.Board board2;
+    private com.mycompany.snake.Board board1;
+    private com.mycompany.snake.ScoreBoard scoreBoard1;
     // End of variables declaration//GEN-END:variables
 }

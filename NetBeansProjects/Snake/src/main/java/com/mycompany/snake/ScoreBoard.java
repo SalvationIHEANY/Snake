@@ -4,11 +4,13 @@
  */
 package com.mycompany.snake;
 
+import com.mycompany.snake.interfaces.Incrementer;
+
 /**
  *
  * @author saliheany
  */
-public class ScoreBoard extends javax.swing.JPanel {
+public class ScoreBoard extends javax.swing.JPanel implements Incrementer {
 
     /**
      * Creates new form ScoreBoard
@@ -18,6 +20,7 @@ public class ScoreBoard extends javax.swing.JPanel {
     public ScoreBoard() {
         initComponents();
         score = 0;
+        incrementScore(0);
     }
     public void incrementScore(int increment) {
         score += increment;
@@ -45,4 +48,10 @@ public class ScoreBoard extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
+@Override
+    public void reset() {
+        score = 0;
+        incrementScore(0);
+    }
+
 }
