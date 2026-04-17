@@ -1,9 +1,11 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.mycompany.snake;
 
+import com.mycompany.snake.interfaces.DrawSquareInterface;
+import com.mycompany.snake.interfaces.Incrementer;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -28,6 +30,7 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
     private SpecialFood specialFood;
     private Timer timer;
     private MyKeyAdapter keyAdapter;
+    private Incrementer incrementer;
     
     class MyKeyAdapter extends KeyAdapter {
 
@@ -79,12 +82,20 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
         });
         initGame();
     }
+    public void setIncrementer(Incrementer incrementer){
+        this.incrementer = incrementer;
+    }
     public void initGame() {
         timer.start();
     }
     private void tick() {
         if (snake.canMove()){
             snake.moveSnake();
+            if(snake.isHead(food)) {
+                snake.grow(1);
+                food = new Food(this);
+                incrementer.incrementScore(1);
+            }
         } else{
             //Gsme over
         }
@@ -116,7 +127,6 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
         return getHeight() / NUM_ROWS;
     }
    
-
     public void drawSquare(Graphics g, int row, int col,
             boolean isHead) {
         int x = col * squareWidth();
