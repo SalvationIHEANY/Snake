@@ -31,8 +31,15 @@ public class GameSnake extends javax.swing.JFrame {
 
         scoreBoard1 = new com.mycompany.snake.ScoreBoard();
         board1 = new com.mycompany.snake.Board();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        scoreBoard1.setBackground(new java.awt.Color(168, 49, 133));
+        scoreBoard1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         getContentPane().add(scoreBoard1, java.awt.BorderLayout.PAGE_END);
 
         javax.swing.GroupLayout board1Layout = new javax.swing.GroupLayout(board1);
@@ -43,13 +50,37 @@ public class GameSnake extends javax.swing.JFrame {
         );
         board1Layout.setVerticalGroup(
             board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 272, Short.MAX_VALUE)
+            .addGap(0, 247, Short.MAX_VALUE)
         );
 
         getContentPane().add(board1, java.awt.BorderLayout.CENTER);
 
+        jMenu1.setText("Menu");
+        jMenu1.addActionListener(this::jMenu1ActionPerformed);
+
+        jMenuItem1.setText("Exit");
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+         // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,6 +109,10 @@ public class GameSnake extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.mycompany.snake.Board board1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private com.mycompany.snake.ScoreBoard scoreBoard1;
     // End of variables declaration//GEN-END:variables
 }

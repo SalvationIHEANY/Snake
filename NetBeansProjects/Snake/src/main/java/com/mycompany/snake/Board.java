@@ -82,6 +82,13 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
         });
         initGame();
     }
+    public void pause() {
+        if (timer.isRunning()) {
+            timer.stop();
+        } else {
+            timer.start();
+        }
+    }
     public void setIncrementer(Incrementer incrementer){
         this.incrementer = incrementer;
     }
