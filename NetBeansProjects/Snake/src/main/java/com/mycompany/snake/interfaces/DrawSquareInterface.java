@@ -6,6 +6,7 @@ package com.mycompany.snake.interfaces;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import com.mycompany.snake.SquareColor;
 
 /**
  *
@@ -13,5 +14,5 @@ import java.awt.Graphics;
  */
 public interface DrawSquareInterface {
     public void drawSquare(Graphics g, int row, int col,
-            boolean isHead);
+            SquareColor sc);
 }

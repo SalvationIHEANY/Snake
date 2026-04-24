@@ -30,7 +30,7 @@ public class Food extends Node {
     public void paint(Graphics g){
         Color color =  new Color(255, 255, 0);
         g.setColor(color);
-        drawSquareInterface.drawSquare(g, getRow(), getCol(), false);
+        drawSquareInterface.drawSquare(g, getRow(), getCol(), SquareColor.FOOD);
     }
     
 }

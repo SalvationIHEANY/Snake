@@ -27,7 +27,7 @@ public class SpecialFood extends Food {
     }
     
     public void paint(Graphics g){
-        drawSquareInterface.drawSquare(g, getRow(), getCol(), false);
+        drawSquareInterface.drawSquare(g, getRow(), getCol(), SquareColor.SPECIALFOOD);
     }
     
 }

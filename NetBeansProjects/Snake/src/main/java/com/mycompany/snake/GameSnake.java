@@ -17,7 +17,7 @@ public class GameSnake extends javax.swing.JFrame {
      */
     public GameSnake() {
         initComponents();
-        board1.setIncrementer(scoreBoard1);
+        board2.setIncrementer(scoreBoard1);
     }
 
     /**
@@ -30,30 +30,32 @@ public class GameSnake extends javax.swing.JFrame {
     private void initComponents() {
 
         scoreBoard1 = new com.mycompany.snake.ScoreBoard();
-        board1 = new com.mycompany.snake.Board();
+        board2 = new com.mycompany.snake.Board();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        scoreBoard1.setBackground(new java.awt.Color(168, 49, 133));
+        scoreBoard1.setBackground(new java.awt.Color(255, 240, 201));
         scoreBoard1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         getContentPane().add(scoreBoard1, java.awt.BorderLayout.PAGE_END);
 
-        javax.swing.GroupLayout board1Layout = new javax.swing.GroupLayout(board1);
-        board1.setLayout(board1Layout);
-        board1Layout.setHorizontalGroup(
-            board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout board2Layout = new javax.swing.GroupLayout(board2);
+        board2.setLayout(board2Layout);
+        board2Layout.setHorizontalGroup(
+            board2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
         );
-        board1Layout.setVerticalGroup(
-            board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 247, Short.MAX_VALUE)
+        board2Layout.setVerticalGroup(
+            board2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 246, Short.MAX_VALUE)
         );
 
-        getContentPane().add(board1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(board2, java.awt.BorderLayout.CENTER);
+
+        jMenuBar1.setBackground(new java.awt.Color(255, 240, 201));
+        jMenuBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jMenu1.setText("Menu");
         jMenu1.addActionListener(this::jMenu1ActionPerformed);
@@ -63,9 +65,6 @@ public class GameSnake extends javax.swing.JFrame {
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -108,9 +107,8 @@ public class GameSnake extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.mycompany.snake.Board board1;
+    private com.mycompany.snake.Board board2;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private com.mycompany.snake.ScoreBoard scoreBoard1;

@@ -45,9 +45,10 @@ public class Snake {
     public void paint(Graphics g) {
         boolean first = true;
         for(Node node : nodes) {
-            drawSquareInterface.drawSquare(g, node.getRow(), node.getCol(), first);
+            drawSquareInterface.drawSquare(g, node.getRow(), node.getCol(), SquareColor.HEAD);
             if (first) {
                 first = false;
+                drawSquareInterface.drawSquare(g, node.getRow(), node.getCol(), SquareColor.BODY);
             }
         }
     }
