@@ -22,8 +22,8 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 public class Board extends javax.swing.JPanel implements DrawSquareInterface {
 
-    public static final int NUM_ROWS = 20;
-    public static final int NUM_COLS = 20;
+    public static final int NUM_ROWS = 40;
+    public static final int NUM_COLS = 40;
     private static final int DELTA_TIME = 200;
     public static final int SPECIAL_TIME = 3500;
 
@@ -207,6 +207,8 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        scoreBoard1 = new com.mycompany.snake.ScoreBoard();
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -221,5 +223,6 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.mycompany.snake.ScoreBoard scoreBoard1;
     // End of variables declaration//GEN-END:variables
 }
