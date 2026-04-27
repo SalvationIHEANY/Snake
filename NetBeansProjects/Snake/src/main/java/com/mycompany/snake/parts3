@@ -1,0 +1,458 @@
+# 🎯 ARSENAL DE EXAMEN SNAKE — PARTE 3
+## Tabla Maestra + Bloques Extra + Cheatsheet Final
+
+---
+
+## 🗺️ TABLA MAESTRA: "Si me piden X → hago Y en fichero Z"
+
+| # | Te piden... | Clase(s) a tocar | Qué hacer |
+|---|---|---|---|
+| 1 | Arreglar reinicio | `Board` | Limpiar KeyListeners en `initGame()` |
+| 2 | Pausa | `Board` | Atributo `paused`, método `togglePause()`, texto en `paintComponent()` |
+| 3 | Vidas | `Board` | Atributo `lives`, método `handleDeath()` en vez de `gameOver()` |
+| 4 | Obstáculos | `Board` + `Snake` | Lista de `Node`, pintar en gris, comprobar colisión |
+| 5 | Wrap-around | `Snake` | Módulo en `calculateNextNode()`, quitar `canMoveTo()` de `colides()` |
+| 6 | High Score | Nueva clase | `HighScoreManager` con fichero, guardar en `gameOver()` |
+| 7 | Sonido | Nueva clase | `SoundPlayer` con `javax.sound.sampled.Clip` |
+| 8 | AboutDialog | Nueva clase + `Main` | `JDialog` con info, conectar al menú |
+| 9 | Comida venenosa | Nueva clase + `Board` | `PoisonFood extends Food`, puntos negativos, `shrink()` |
+| 10 | Acelerar al comer | `Board` | `timer.setDelay()` tras comer |
+| 11 | Food extends Node | `Food` | Cambiar herencia, usar `setRow()`/`setCol()` en constructor |
+| 12 | Polimorfismo Food | `Food` + subclases | Añadir `getScoreValue()`, `getGrowthValue()`, `getColor()` |
+| 13 | Factory Pattern | Nueva clase | `FoodFactory.create()` |
+| 14 | Grid visual | `Board` | Método `drawGrid()` en `paintComponent()` |
+| 15 | Tiempo límite | `Board` | Segundo `Timer` de countdown |
+| 16 | Multijugador | `Board` + `Snake` | Dos `Snake`, WASD + flechas, `colidesWithOther()` |
+| 17 | Multilenguaje | `Config` + `.properties` | `ResourceBundle`, menú de idioma |
+| 18 | Game Over bonito | `Board` | `drawString()` + fondo semitransparente |
+| 19 | State Pattern | Nuevo enum + `Board` | `GameState` enum, reemplazar booleans |
+| 20 | ConfigDialog mejor | `ConfigDialog` | Validación, botón Cancel, `JComboBox<String>` |
+| 21 | Node con equals | `Node` | Sobrescribir `equals()` y `hashCode()` |
+| 22 | Singleton Config | `Config` | Constructor privado + `getInstance()` |
+| 23 | Guardar objetos | Nueva clase | `ObjectOutputStream` / `ObjectInputStream` |
+| 24 | Fondo con imagen | `Board` | `ImageIO.read()` + `g.drawImage()` |
+| 25 | Invencibilidad | `Board` + `Snake` | Power-up temporal, ignorar colisiones |
+| 26 | Doble puntuación | `Board` | Flag `doubleScore`, Timer temporal |
+| 27 | Puntuación en tablero | `Board` | `g.drawString()` en `paintComponent()` |
+| 28 | Menú reiniciar | `Main` | Nuevo `JMenuItem` que llame `board.initGame()` |
+| 29 | Menú salir | `Main` | `System.exit(0)` |
+| 30 | Comida con timer visible | `Board` | Barra de progreso dibujada junto a SpecialFood |
+
+---
+
+## 21. 🔑 Node con equals() y hashCode()
+
+**Cuándo:** "mejora Node" / "usa equals" / "usa en HashSet"
+
+```java
+// EN Node.java — añadir estos 3 métodos
+@Override
+public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (!(obj instanceof Node)) return false;
+    Node other = (Node) obj;
+    return this.row == other.row && this.col == other.col;
+}
+
+@Override
+public int hashCode() {
+    return 31 * row + col;
+}
+
+@Override
+public String toString() {
+    return "Node(" + row + ", " + col + ")";
+}
+
+// BENEFICIO: ahora puedes hacer:
+// snake.getBody().contains(new Node(5, 10))  ← funciona correctamente
+// Set<Node> visited = new HashSet<>();       ← funciona correctamente
+```
+
+---
+
+## 22. 🔒 Singleton para Config
+
+**Cuándo:** "patrón Singleton" / "asegura una sola instancia de Config"
+
+```java
+// REEMPLAZAR Config.java
+package com.mycompany.snakeexam2;
+
+public class Config {
+    private static Config instance;
+
+    private String playerName = "Player";
+    private int level = 1;
+
+    private Config() {} // Constructor privado
+
+    public static Config getInstance() {
+        if (instance == null) {
+            instance = new Config();
+        }
+        return instance;
+    }
+
+    public String getPlayerName() { return playerName; }
+    public void setPlayerName(String name) { this.playerName = name; }
+
+    public int getLevel() { return level; }
+    public void setLevel(int level) { this.level = level; }
+
+    public int getDeltaTime() {
+        switch (level) {
+            case 0: return 500;
+            case 1: return 200;
+            case 2: return 100;
+            case 3: return 40;
+            default: return 200;
+        }
+    }
+}
+
+// USO: Config.getInstance().getDeltaTime()
+// USO: Config.getInstance().setPlayerName("Hichem")
+```
+
+**⚠️ OJO:** Si haces Singleton, TODOS los accesos `Config.level`, `Config.playerName`, `Config.getDeltaTime()` deben cambiar a `Config.getInstance().getLevel()` etc. Es un cambio grande. Solo hazlo si lo piden explícitamente.
+
+---
+
+## 23. 💾 Serialización (guardar/cargar partida completa)
+
+**Cuándo:** "guarda la partida" / "serialización de objetos" / "save/load"
+
+```java
+// Hacer Node serializable
+public class Node implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
+    // ... resto igual ...
+}
+
+// Hacer Snake serializable
+public class Snake implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
+    // ... resto igual ...
+}
+
+// NUEVA CLASE: GameSaver.java
+package com.mycompany.snakeexam2;
+
+import java.io.*;
+
+public class GameSaver {
+    private static final String SAVE_FILE = "savegame.dat";
+
+    public static void saveGame(Snake snake, int score, int level) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(
+                new FileOutputStream(SAVE_FILE))) {
+            oos.writeObject(snake);
+            oos.writeInt(score);
+            oos.writeInt(level);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Object[] loadGame() {
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream(SAVE_FILE))) {
+            Snake snake = (Snake) ois.readObject();
+            int score = ois.readInt();
+            int level = ois.readInt();
+            return new Object[]{snake, score, level};
+        } catch (Exception e) {
+            return null; // No hay partida guardada
+        }
+    }
+}
+
+// EN Main menú — botón guardar:
+JMenuItem saveItem = new JMenuItem("Save Game");
+saveItem.addActionListener(e -> {
+    GameSaver.saveGame(board.getSnake(), scoreboard.getScore(), Config.level);
+    JOptionPane.showMessageDialog(Main.this, "Game saved!");
+});
+
+// EN Main menú — botón cargar:
+JMenuItem loadItem = new JMenuItem("Load Game");
+loadItem.addActionListener(e -> {
+    Object[] data = GameSaver.loadGame();
+    if (data != null) {
+        board.loadGame((Snake) data[0], (int) data[1], (int) data[2]);
+    }
+});
+
+// EN Board — necesitas getSnake() y loadGame():
+public Snake getSnake() { return snake; }
+
+public void loadGame(Snake savedSnake, int savedScore, int savedLevel) {
+    if (timer != null) timer.stop();
+    snake = savedSnake;
+    Config.level = savedLevel;
+    food = createFood();
+    gameOver = false;
+    // Restaurar score... (necesitas método en ScoreBoard)
+    timer = new Timer(Config.getDeltaTime(), e -> tick());
+    timer.start();
+    repaint();
+}
+```
+
+---
+
+## 24. 🖼️ Fondo con imagen
+
+**Cuándo:** "pon una imagen de fondo" / "background"
+
+```java
+// EN Board.java — atributo (ya existe declarado pero no usado)
+private BufferedImage background;
+
+// EN Board constructor o initGame():
+try {
+    background = javax.imageio.ImageIO.read(new java.io.File("background.png"));
+} catch (Exception e) {
+    background = null; // Sin imagen, fondo normal
+}
+
+// EN paintComponent() — al principio, después de super:
+if (background != null) {
+    g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+} else {
+    g.setColor(Color.WHITE);
+    g.fillRect(0, 0, getWidth(), getHeight());
+}
+```
+
+---
+
+## 25. ⭐ Power-up: Invencibilidad temporal
+
+**Cuándo:** "añade power-ups" / "invencibilidad"
+
+```java
+// EN Board.java
+private boolean invincible = false;
+private Timer invincibleTimer;
+
+public void activateInvincibility(int durationMs) {
+    invincible = true;
+    if (invincibleTimer != null) invincibleTimer.stop();
+    invincibleTimer = new Timer(durationMs, e -> {
+        invincible = false;
+        invincibleTimer.stop();
+    });
+    invincibleTimer.start();
+}
+
+// EN tick() — si es invencible, no hay game over
+if (!invincible && snake.colides()) {
+    handleDeath(); // o gameOver()
+} else {
+    // Si colisiona pero es invencible, solo calcular wrap o ignorar
+    if (!snake.colides()) {
+        snake.move();
+    }
+    // ... resto del tick ...
+}
+
+// Crear InvincibilityFood:
+public class InvincibilityFood extends Food {
+    public InvincibilityFood(Snake snake) { super(snake); }
+
+    @Override
+    public void paint(Graphics g, int w, int h) {
+        Util.drawSquare(g, getRow(), getCol(), Color.ORANGE, w, h);
+    }
+}
+
+// EN tick() cuando come InvincibilityFood:
+if (food instanceof InvincibilityFood) {
+    activateInvincibility(5000); // 5 segundos
+}
+```
+
+---
+
+## 26. 💰 Doble puntuación temporal
+
+**Cuándo:** "multiplicador de puntos"
+
+```java
+// EN Board.java
+private int scoreMultiplier = 1;
+private Timer multiplierTimer;
+
+public void activateDoubleScore(int durationMs) {
+    scoreMultiplier = 2;
+    if (multiplierTimer != null) multiplierTimer.stop();
+    multiplierTimer = new Timer(durationMs, e -> {
+        scoreMultiplier = 1;
+        multiplierTimer.stop();
+    });
+    multiplierTimer.start();
+}
+
+// EN tick() — usar multiplicador
+incrementer.incrementScore(food.getScoreValue() * scoreMultiplier);
+```
+
+---
+
+## 27. 📊 Puntuación dibujada en el tablero (no solo en ScoreBoard)
+
+```java
+// EN paintComponent() — al final
+g.setColor(Color.BLACK);
+g.setFont(new Font("Arial", Font.BOLD, 14));
+g.drawString("Score: " + ((ScoreBoard) incrementer).getScore(), 10, 20);
+g.drawString("Level: " + (Config.level + 1), 10, 40);
+```
+
+---
+
+## 28. 📑 Menú con Reiniciar y Salir
+
+```java
+// EN Main.createMenu() — añadir items al menú Game
+
+JMenuItem restartItem = new JMenuItem("Restart");
+restartItem.addActionListener(e -> board.initGame());
+jMenu1.add(restartItem);
+
+jMenu1.addSeparator(); // línea separadora
+
+JMenuItem exitItem = new JMenuItem("Exit");
+exitItem.addActionListener(e -> System.exit(0));
+jMenu1.add(exitItem);
+```
+
+---
+
+## 29. 🎯 Colisión mejorada (ignorar cola que se va a mover)
+
+```java
+// EN Snake.java — versión refinada
+public boolean colidesWithItself(Node nextNode) {
+    int row = nextNode.getRow();
+    int col = nextNode.getCol();
+    // Si no vamos a crecer, la cola se eliminará → no contar el último nodo
+    int limit = (nodesToGrow > 0) ? body.size() : body.size() - 1;
+    for (int i = 0; i < limit; i++) {
+        if (body.get(i).getRow() == row && body.get(i).getCol() == col) {
+            return true;
+        }
+    }
+    return false;
+}
+```
+
+**Qué decir en oral:** "Si la serpiente no está creciendo, la cola se eliminará en este tick, así que no debería contar como colisión. Esto hace la detección más justa."
+
+---
+
+## 30. SpecialFood con hilo seguro (fix thread-safety)
+
+```java
+// EN SpecialFood.java — versión corregida
+public class SpecialFood extends Food {
+    private volatile boolean active = true; // volatile para visibilidad entre hilos
+    public static final int MAX_MILLISECONDS = 10000;
+    public static final int MIN_MILLISECONDS = 3000;
+    private SpecialFoodRemover foodRemover;
+
+    public SpecialFood(Snake snake, SpecialFoodRemover foodRemover) {
+        super(snake);
+        this.foodRemover = foodRemover;
+        int visibleMs = (int)(Math.random()*(MAX_MILLISECONDS-MIN_MILLISECONDS)+MIN_MILLISECONDS);
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(visibleMs);
+                if (active) {
+                    // Ejecutar en el hilo de Swing (thread-safe)
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        foodRemover.removeSpecialFood();
+                    });
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+
+    public void deactivate() { active = false; }
+
+    @Override
+    public void paint(java.awt.Graphics g, int w, int h) {
+        Util.drawSquare(g, getRow(), getCol(), java.awt.Color.magenta, w, h);
+    }
+}
+
+// EN Board.tick() — desactivar si se come antes de que expire:
+if (snake.eats(food)) {
+    if (food instanceof SpecialFood) {
+        ((SpecialFood) food).deactivate(); // ← evita que el hilo la elimine después
+        snake.incrementNodesToGrow(3);
+        incrementer.incrementScore(20);
+    }
+    // ...
+}
+```
+
+---
+
+## 📋 CHEATSHEET DE 1 PÁGINA (para imprimir)
+
+```
+╔══════════════════════════════════════════════════════════════════╗
+║                    SNAKE EXAM CHEATSHEET                        ║
+╠══════════════════════════════════════════════════════════════════╣
+║                                                                  ║
+║  MOVIMIENTO: body.add(0, newHead) + body.remove(last)           ║
+║  CRECER:     no quitar cola → nodesToGrow--                     ║
+║  COLISIÓN:   fuera del tablero || choca con su body             ║
+║  COMER:      head.row == food.row && head.col == food.col       ║
+║  GAME LOOP:  Timer → tick() → colides? → move → eats? → repaint║
+║                                                                  ║
+║  CLASES CLAVE:                                                   ║
+║  Board   = motor (Timer + tick + paint + teclado)                ║
+║  Snake   = lógica (move + colides + eats + body)                 ║
+║  Food    = posición aleatoria no sobre snake                     ║
+║  Special = Food + hilo temporizador + más puntos                 ║
+║                                                                  ║
+║  PARA AÑADIR ALGO NUEVO:                                         ║
+║  1. ¿Qué clase toco? (Snake/Board/Config/Nueva)                 ║
+║  2. Añadir atributo mínimo                                       ║
+║  3. Crear método claro                                           ║
+║  4. Integrar en tick() o paintComponent() o menú                 ║
+║  5. Verificar repaint + foco teclado + timer                     ║
+║                                                                  ║
+║  BUGS CONOCIDOS:                                                 ║
+║  • KeyListeners duplicados → limpiar en initGame()               ║
+║  • Thread SpecialFood no thread-safe → SwingUtilities            ║
+║  • Thread no se cancela al comer → flag active + deactivate()    ║
+║  • Config.deltaTime declarado sin uso → eliminar                 ║
+║  • playerName null → validar en ScoreBoard                       ║
+║                                                                  ║
+║  INTERFACES:                                                     ║
+║  Incrementer      → ScoreBoard (incrementScore + reset)          ║
+║  SpecialFoodRemover → Board (removeSpecialFood)                  ║
+║                                                                  ║
+║  PATRONES:                                                       ║
+║  Herencia:     Food ← SpecialFood                                ║
+║  Polimorfismo: paint() sobrescrito, instanceof en tick()         ║
+║  Callback:     SpecialFood → SpecialFoodRemover → Board          ║
+║  Inversión dep: Board → Incrementer ← ScoreBoard                ║
+║  Factory:      FoodFactory.create() centraliza creación          ║
+║  State:        GameState enum (MENU/PLAYING/PAUSED/OVER)         ║
+║  Singleton:    Config con getInstance()                          ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+**FIN DEL ARSENAL. Con estas 3 partes + las 3 partes de análisis anterior, tienes cobertura completa para cualquier variante de examen.** 🎯
