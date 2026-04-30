@@ -26,7 +26,7 @@ public class Snake {
     private int nodesToGrow;
     
     public Snake (DrawSquareInterface drawSquareInterface) {
-        direction = direction.LEFT;
+        direction = Direction.LEFT;
         nodes = new ArrayList<Node>();
         this.drawSquareInterface = drawSquareInterface;
         int initRow = Board.NUM_ROWS /2 ;
@@ -52,12 +52,13 @@ public class Snake {
             }
         }
     }
-    public void changeDirection(Direction direction){
-        this.direction = direction;
-    }
-    public Direction getDirection(){
+    public Direction getDirection() {
         return direction;
     }
+    public void changeDirection(Direction xdirection){
+        direction = xdirection;
+    }
+    
     public boolean canMove() {
         int row = nodes.getFirst().getRow();
         int col = nodes.getFirst().getCol();
@@ -82,6 +83,14 @@ public class Snake {
         }
                 
         return true;
+    }
+    public boolean contains(Node node) {
+        for (Node n : nodes) {
+            if (node.getCol() == n.getCol() && node.getRow() == n.getRow()) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public boolean colidesWithItself(Node nodeX) {

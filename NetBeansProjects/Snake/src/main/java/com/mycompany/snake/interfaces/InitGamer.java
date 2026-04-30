@@ -6,10 +6,8 @@ package com.mycompany.snake.interfaces;
 
 /**
  *
- * @author saliheany
+ * @author NIGGA
  */
-public interface Incrementer {
-    public void incrementScore(int increment);
-    public int getScore();
-    public void resetScore();
+public interface InitGamer {
+    public void initGame();
 }

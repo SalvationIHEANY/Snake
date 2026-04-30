@@ -4,12 +4,12 @@
  */
 package com.mycompany.snake.interfaces;
 
+import java.awt.Component;
+
 /**
  *
- * @author saliheany
+ * @author NIGGA
  */
-public interface Incrementer {
-    public void incrementScore(int increment);
-    public int getScore();
-    public void resetScore();
+public interface GameOverInterface {
+    public void setVisible(Component component);
 }

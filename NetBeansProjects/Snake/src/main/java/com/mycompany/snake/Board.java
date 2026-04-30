@@ -5,7 +5,9 @@
 package com.mycompany.snake;
 
 import com.mycompany.snake.interfaces.DrawSquareInterface;
+import com.mycompany.snake.interfaces.GameOverInterface;
 import com.mycompany.snake.interfaces.Incrementer;
+import com.mycompany.snake.interfaces.InitGamer;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -19,7 +21,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
-public class Board extends javax.swing.JPanel implements DrawSquareInterface {
+public class Board extends javax.swing.JPanel implements DrawSquareInterface , InitGamer {
 
     public static final int NUM_ROWS = 20;
     public static final int NUM_COLS = 20;
@@ -34,6 +36,8 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
     private SquareColor squareColor;
     private MyKeyAdapter keyAdapter;
     private Incrementer incrementer;
+    
+    private GameOverInterface gameOverInterface;
     
     class MyKeyAdapter extends KeyAdapter {
 
@@ -99,11 +103,30 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
             timer.start();
         }
     }
+    public void clear() {
+        snake = null;
+        food = null;
+        specialFood = null;
+        repaint();
+    }
+    public void doGameOver() {
+        timer.stop();
+        specialTimer.stop();
+        gameOverInterface.setVisible(this);
+    }
+    public void setGameOver(GameOverInterface gameOverInterface) {
+        this.gameOverInterface = gameOverInterface;
+    }
     public void setIncrementer(Incrementer incrementer){
         this.incrementer = incrementer;
     }
     public void initGame() {
+        if (incrementer != null) {
+            incrementer.resetScore();
+        }
         timer.start();
+        specialTimer.start();
+        snake = new Snake(this);
     }
     private void tick() {
         if (snake.canMove()){
@@ -119,7 +142,7 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
                 incrementer.incrementScore(3);
             }
         } else{
-            //Gsme over
+            doGameOver();
         }
         repaint();
     }
@@ -128,8 +151,8 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintBorderBoard(g);
-        if (snake != null){snake.paint(g);}
-        if (food != null) {food.paint(g);}
+        snake.paint(g);
+        food.paint(g);
         if (specialFood != null) {
             specialFood.paint(g);
         }

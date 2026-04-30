@@ -26,6 +26,16 @@ public class ScoreBoard extends javax.swing.JPanel implements Incrementer {
         score += increment;
         jLabel1.setText("Score: " + score);
     }
+    @Override
+    public void resetScore() {
+        score = 0;
+        incrementScore(0);
+    }
+    
+    @Override
+    public int getScore() {
+        return score;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,10 +58,4 @@ public class ScoreBoard extends javax.swing.JPanel implements Incrementer {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
-@Override
-    public void reset() {
-        score = 0;
-        incrementScore(0);
-    }
-
 }

@@ -4,6 +4,8 @@
  */
 package com.mycompany.snake;
 
+import com.mycompany.snake.interfaces.GameOverDialog;
+
 /**
  *
  * @author saliheany
@@ -11,13 +13,18 @@ package com.mycompany.snake;
 public class GameSnake extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GameSnake.class.getName());
-
+    private GameOverDialog gameOverDialog;
     /**
      * Creates new form GameSnake
      */
     public GameSnake() {
         initComponents();
         board2.setIncrementer(scoreBoard1);
+        gameOverDialog = new GameOverDialog(this, true);
+        gameOverDialog.setIncrementer(scoreBoard1);
+        board2.setGameOver(gameOverDialog);
+        gameOverDialog.setInitGamer(board2);
+        board2.initGame();
     }
 
     /**
@@ -34,6 +41,7 @@ public class GameSnake extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,6 +72,10 @@ public class GameSnake extends javax.swing.JFrame {
         jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setText("New Game");
+        jMenuItem2.addActionListener(this::jMenuItem2ActionPerformed);
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -73,6 +85,7 @@ public class GameSnake extends javax.swing.JFrame {
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
          // TODO add your handling code here:
+         
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -80,6 +93,11 @@ public class GameSnake extends javax.swing.JFrame {
         System.exit(0);
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        board2.initGame();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -111,6 +129,7 @@ public class GameSnake extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private com.mycompany.snake.ScoreBoard scoreBoard1;
     // End of variables declaration//GEN-END:variables
 }
